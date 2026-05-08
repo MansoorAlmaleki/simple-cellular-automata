@@ -43,10 +43,22 @@ struct Particle{
        if(currentType == ParticleType::AIR) return;
 
       if(currentType == ParticleType::SAND) {
+        int belowIndex = (y+1)*width+x;
         if(y < height - 1) {
-            int belowIndex = (y + 1) * width + x;
             if(ParticleGrid[belowIndex].PixelType == ParticleType::AIR) {
                 ParticleGridBuffer[belowIndex] = Particle{ParticleType::SAND};
+                return;
+            }
+        }
+        if(x > 0 || x < width-1){
+            if((ParticleGrid[belowIndex].PixelType == ParticleType::STONE || ParticleGrid[belowIndex].PixelType == ParticleType::SAND) && (ParticleGrid[y*width+(x-1)].PixelType == ParticleType::AIR) && (ParticleGrid[(y+1)*width+(x-1)].PixelType == ParticleType::AIR)) {
+
+                ParticleGridBuffer[y*width+(x-1)] = Particle{ParticleType::SAND};
+                return;
+            }
+            if((ParticleGrid[belowIndex].PixelType == ParticleType::STONE || ParticleGrid[belowIndex].PixelType == ParticleType::SAND) && (ParticleGrid[y*width+(x+1)].PixelType == ParticleType::AIR) && (ParticleGrid[(y+1)*width+(x+1)].PixelType == ParticleType::AIR)) {
+
+                ParticleGridBuffer[y*width+(x+1)] = Particle{ParticleType::SAND};
                 return;
             }
         }
